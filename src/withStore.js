@@ -1,5 +1,7 @@
 export default function withStore(storeOptions = {}) {
     return function wrapperFn(component) {
-        return component.bind(component, storeOptions);
+        return function outer(...args) {
+            return component.apply(component, [...args, storeOptions]);
+        };
     }
 }
