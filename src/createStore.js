@@ -1,55 +1,42 @@
-export default function createStore(/* initial state */ state = {}, middleware) {
-    let subscribers = [];
-    state = Object.assign({}, state);
-    middleware = middleware.map(fn => fn(getState));
-    function subscribe(subscriber) {
-        subscribers.push(subscriber);
-        return () => { unsubscribe(subscriber); };
+import Subscription from "./subscription";
+import Store from "./store";
+import reducer from './reduce';
+
+/**
+ *
+ * @description creates and returns a store
+ * @param {*} [initialState={}]
+ * @param {*} [enhancer=[]]
+ * @returns {object} store a javascript object
+ */
+export default function createStore(/* initial state */ initialState = {}, enhancer = []) {
+    const subscription = new Subscription();
+    const store = new Store(initialState);
+    const { subscribe, unsubscribe } = subscription;
+    const { setState, getState } = store;
+    const middleware = [...enhancer.map(fn => fn(getState)), reducer()(getState)];
+
+    function update(data) {
+        const newState = setState.call(store, data);
+        return subscription.getAll().map(componentSetState => componentSetState(newState));
     }
 
-    function unsubscribe(subscriber) {
-        const activeSubscribers = subscribers.reduce((out, subs) => {
-            if (subs === subscriber) {
-                subscriber = null;
-            } else {
-                out.push(subs);
-            }
-            return out;
-        }, []);
-
-        subscribers = activeSubscribers;
-    }
-
-    function action(action) {
-        return function storeAction(props, behaviors) {
-            return action.apply(this, [getState, middleware, setState, props, behaviors]);
+    function action(userDefinedAction) {
+        return function (props, behaviors) {
+            return userDefinedAction.apply(null, [getState, middleware, update, props, behaviors]);
         };
     }
 
-    function setState(updateState) {
-        if (process.env.NODE_ENV === 'development') {
-            console.log('%c prev state', 'color: grey', state);
-        }
-        state = {
-            ...state,
-            ...updateState
-        };
-        if (process.env.NODE_ENV === 'development') {
-            console.log('%c new state', 'color: maroon', state);
-        }
-        return subscribers.map(subscriber => subscriber(state));
-    }
-
-    function getState() {
-        return state;
-    }
-
+    // return {
+    //     action,
+    //     getState: getState.bind(store),
+    //     subscribe: subscribe.bind(subscription),
+    //     unsubscribe: unsubscribe.bind(subscription)
+    // };
     return {
-        getState,
         action,
+        getState,
         subscribe,
-        unsubscribe,
-        setState,
-        dispatch: getState
+        unsubscribe
     };
 };

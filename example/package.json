@@ -1,0 +1,33 @@
+{
+  "name": "@js-factory/onejs",
+  "version": "0.0.1",
+  "description": "A simple JavaScript framework for simple application",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "babel src --out-dir dist",
+    "prepublishOnly": "npm run build",
+    "server": "webpack-dev-server --open"
+  },
+  "keywords": [
+    "javascript",
+    "react",
+    "preact",
+    "store",
+    "spa"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.6",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.5",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-preact": "^1.1.0"
+  }
+}

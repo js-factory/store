@@ -1,27 +1,10 @@
-const log = (type) => {
-    if (process.env.NODE_ENV !== 'production') {
-        console.log(`%c action --> ${type}`, 'color: green; font-weight: bold;');
-    }
-}
-
-const compose = (funcs, req) => {
-    return funcs.reduce(function (a, b) {
-        return function (...args) {
-            return a(req, b(...args));
-        }
-    });
-};
-
+import compose from './util/compose';
 function actionCreator(actionName, actionConfig = {}) {
     return function (getState, middleware, dispatch, payload = {}, behaviors) {
-        const {
-            url,
-            key
-        } = actionConfig;
+        const { url, key } = actionConfig;
 
-        if (!middleware) {
+        if (!middleware || middleware.length) {
             if (!url && !key) {
-                log(type);
                 return payload;
             };
         }
@@ -33,8 +16,10 @@ function actionCreator(actionName, actionConfig = {}) {
                 }
                 return dispatch({ [key]: result });
             }
-        }
-        const o = compose(middleware, { actionName, actionConfig, behaviors, payload })({ actionName, actionConfig, behaviors, payload }, next);
+        };
+
+        const options = { actionName, actionConfig, behaviors, payload };
+        const o = compose(middleware, options)(options, next);
         o(payload);
     }
 };

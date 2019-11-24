@@ -1,11 +1,10 @@
 {
     "presets": [
-        "env"
+        "@babel/env"
     ],
     "plugins": [
-        "transform-decorators-legacy",
         [
-            "transform-object-rest-spread",
+            "@babel/plugin-proposal-object-rest-spread",
             {
                 "useBuiltIns": true
             }
