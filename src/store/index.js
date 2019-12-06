@@ -8,12 +8,14 @@ import log from '../util/log';
 export default class Store {
     constructor(initialState) {
         this.state = Object.assign({}, initialState);
+        this.setState = this.setState.bind(this);
+        this.getState = this.getState.bind(this);
     }
     /**
      * updates the state
      * @param {object} newState 
      */
-    setState = (newState) => {
+    setState(newState) {
         log('prev state', this.state);
 
         this.state = {
@@ -31,5 +33,5 @@ export default class Store {
      * @returns {object} state 
      * @memberof Store
      */
-    getState = () => this.state;
+    getState() { return this.state; }
 }

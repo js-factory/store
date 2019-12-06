@@ -27,16 +27,11 @@ export default function createStore(/* initial state */ initialState = {}, enhan
         };
     }
 
-    // return {
-    //     action,
-    //     getState: getState.bind(store),
-    //     subscribe: subscribe.bind(subscription),
-    //     unsubscribe: unsubscribe.bind(subscription)
-    // };
     return {
         action,
-        getState,
-        subscribe,
-        unsubscribe
+        setState: setState.bind(store),
+        getState: getState.bind(store),
+        subscribe: subscribe.bind(subscription),
+        unsubscribe: unsubscribe.bind(subscription)
     };
 };

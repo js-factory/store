@@ -7,6 +7,9 @@
 export default class Subscription {
     constructor() {
         this.subscriptions = [];
+        this.subscribe = this.subscribe.bind(this);
+        this.unsubscribe = this.unsubscribe.bind(this);
+        this.getAll = this.getAll.bind(this);
     }
 
     /**
@@ -15,7 +18,9 @@ export default class Subscription {
      * @param {any} item
      * @memberof Subscription
      */
-    subscribe = (item) => this.subscriptions.push(item);
+    subscribe(item) {
+        return this.subscriptions.push(item);
+    }
 
     /**
      *
@@ -23,7 +28,7 @@ export default class Subscription {
      * @param {any} itemToBeUnsubscribed
      * @memberof Subscription
      */
-    unsubscribe = (itemToBeUnsubscribed) => {
+    unsubscribe(itemToBeUnsubscribed) {
         this.subscriptions = this.subscriptions.filter(item => item !== itemToBeUnsubscribed);
         return this.subscriptions;
     }
@@ -34,5 +39,5 @@ export default class Subscription {
      * @returns {array} all subscriptions
      * @memberof Subscription
      */
-    getAll = () => this.subscriptions.slice();
+    getAll() { return this.subscriptions.slice(); }
 }
