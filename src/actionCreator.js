@@ -20,8 +20,12 @@ function actionCreator(actionName, actionConfig = {}) {
         } = actionConfig;
 
         if (!middleware) {
+            if(!url && key) {
+                log(actionName);
+                return dispatch({ [key]: result })
+            }
             if (!url && !key) {
-                log(type);
+                log(actionName);
                 return payload;
             };
         }
