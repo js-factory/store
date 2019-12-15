@@ -1,4 +1,4 @@
-export default function createStore(/* initial state */ state = {}, middleware) {
+export default function createStore(/* initial state */ state = {}, middleware = []) {
     let subscribers = [];
     state = Object.assign({}, state);
     middleware = middleware.map(fn => fn(getState));

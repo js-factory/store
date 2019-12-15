@@ -19,9 +19,13 @@ function actionCreator(actionName, actionConfig = {}) {
             key
         } = actionConfig;
 
-        if (!middleware) {
+        if (!middleware.length) {
+            if(!url && key) {
+                log(actionName);
+                return dispatch({ [key]: result })
+            }
             if (!url && !key) {
-                log(type);
+                log(actionName);
                 return payload;
             };
         }
