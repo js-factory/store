@@ -1,3 +1,5 @@
+import callbacks from './callbacks';
+
 const log = (type) => {
     if (process.env.NODE_ENV !== 'production') {
         console.log(`%c action --> ${type}`, 'color: green; font-weight: bold;');
@@ -6,9 +8,7 @@ const log = (type) => {
 
 const compose = (funcs, req) => {
     return funcs.reduce(function (a, b) {
-        return function (...args) {
-            return a(req, b(...args));
-        }
+        return a(req, b(...args));
     });
 };
 
@@ -35,7 +35,15 @@ function actionCreator(actionName, actionConfig = {}) {
                 if (result.then) {
                     return result.then(data => ({ [key]: data })).then(dispatch);
                 }
-                return dispatch({ [key]: result });
+                const updatedData = callbacks(actionConfig, {
+                    data: result,
+                    keyName,
+                    getState,
+                    payload,
+                    behaviors
+                });
+                const { data } = updatedData;
+                return dispatch({ [key]: data });
             }
         }
         const o = compose(middleware, { actionName, actionConfig, behaviors, payload })({ actionName, actionConfig, behaviors, payload }, next);
