@@ -1,10 +1,10 @@
  const injectReducer = (req, res) =>{
     const { reducer } = req;
-    const { keyName, getState, data } = res;
+    const { key, getState, data } = res;
     const store = getState();
     let updatedData = data;
     if (reducer) {
-        updatedData = reducer(store[keyName], data);
+        updatedData = reducer(store[key], data);
     }
     return {
         ...res,
