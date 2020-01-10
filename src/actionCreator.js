@@ -37,7 +37,7 @@ function actionCreator(actionName, actionConfig = {}) {
                 }
                 const updatedData = callbacks(actionConfig, {
                     data: result,
-                    keyName,
+                    key,
                     getState,
                     payload,
                     behaviors
